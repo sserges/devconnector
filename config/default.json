@@ -1,3 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://4ekthPBkDNlZBYbY:obDvfSjj0LxxxlBW@cluster0-p34fz.mongodb.net/devconnector?retryWrites=true&w=majority"
+  "mongoURI": "mongodb+srv://4ekthPBkDNlZBYbY:obDvfSjj0LxxxlBW@cluster0-p34fz.mongodb.net/devconnector?retryWrites=true&w=majority",
+  "jwtSecret": "q9ibohdPqaoF614FEQyJ0Eyu0mqe4M5msveI"
 }
