@@ -1,11 +1,19 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { createOrUpdateProfile } from '../../actions/profile';
+import {
+  createOrUpdateProfile,
+  getCurrentUserProfile
+} from '../../actions/profile';
 
-const CreateProfile = ({ createOrUpdateProfile, history }) => {
+const EditProfile = ({
+  profile: { profile, loading },
+  createOrUpdateProfile,
+  getCurrentUserProfile,
+  history
+}) => {
   const [formData, setFormData] = useState({
     company: '',
     website: '',
@@ -22,6 +30,26 @@ const CreateProfile = ({ createOrUpdateProfile, history }) => {
   });
 
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
+
+  useEffect(() => {
+    getCurrentUserProfile();
+
+    setFormData({
+      company: loading || !profile.company ? '' : profile.company,
+      website: loading || !profile.website ? '' : profile.website,
+      location: loading || !profile.location ? '' : profile.location,
+      status: loading || !profile.status ? '' : profile.status,
+      skills: loading || !profile.skills ? '' : profile.skills.join(','),
+      githubusername:
+        loading || !profile.githubusername ? '' : profile.githubusername,
+      bio: loading || !profile.bio ? '' : profile.bio,
+      twitter: loading || !profile.social ? '' : profile.social.twitter,
+      facebook: loading || !profile.social ? '' : profile.social.facebook,
+      linkedin: loading || !profile.social ? '' : profile.social.linkedin,
+      youtube: loading || !profile.social ? '' : profile.social.youtube,
+      instagram: loading || !profile.social ? '' : profile.social.instagram
+    });
+  }, [loading]);
 
   const {
     company,
@@ -43,7 +71,7 @@ const CreateProfile = ({ createOrUpdateProfile, history }) => {
 
   const onSubmit = e => {
     e.preventDefault();
-    createOrUpdateProfile(formData, history);
+    createOrUpdateProfile(formData, history, true);
   };
 
   return (
@@ -104,7 +132,7 @@ const CreateProfile = ({ createOrUpdateProfile, history }) => {
             onChange={e => onChange(e)}
           />
           <small className='form-text'>
-            City & state suggested (eg. Boston, MA)
+            City &amp; state suggested (eg. Boston, MA)
           </small>
         </div>
         <div className='form-group'>
@@ -221,10 +249,17 @@ const CreateProfile = ({ createOrUpdateProfile, history }) => {
   );
 };
 
-CreateProfile.propTypes = {
-  createOrUpdateProfile: PropTypes.func.isRequired
+EditProfile.propTypes = {
+  createOrUpdateProfile: PropTypes.func.isRequired,
+  getCurrentUserProfile: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired
 };
 
-export default connect(null, { createOrUpdateProfile })(
-  withRouter(CreateProfile)
-);
+const mapStateToProps = state => ({
+  profile: state.profile
+});
+
+export default connect(mapStateToProps, {
+  createOrUpdateProfile,
+  getCurrentUserProfile
+})(withRouter(EditProfile));
