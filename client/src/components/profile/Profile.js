@@ -25,8 +25,10 @@ const Profile = ({
 
   return (
     <Fragment>
-      {profile === null || loading ? (
+      {loading ? (
         <Spinner />
+      ) : profile === null ? (
+        <h2>Profile Not Found</h2>
       ) : (
         <Fragment>
           <Link to='/profiles' className='btn btn-light'>
