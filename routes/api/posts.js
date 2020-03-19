@@ -155,7 +155,7 @@ router.put('/unlike/:id', auth, async (req, res) => {
       return res.status(404).json({ msg: 'Post not found' });
     }
 
-    // Check if the post has already been liked
+    // Check if the post has not yet been liked
     if (
       post.likes.filter(like => like.user.toString() === req.user.id).length ===
       0
